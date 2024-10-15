@@ -16,7 +16,11 @@ import {
   Notifications as NotificationsIcon,
 } from "@mui/icons-material";
 import { useNavigate } from "react-router-dom";
-import { useState } from "react";
+import { lazy, Suspense, useState } from "react";
+
+const SearchDialog = lazy(() => import("../specific/Search"));
+const NotificationDialog = lazy(() => import("../specific/Notifications"));
+const NewGroupDialog = lazy(() => import("../specific/NewGroup"));
 
 const Header = () => {
   const navigate = useNavigate();
@@ -45,7 +49,6 @@ const Header = () => {
   };
 
   const openNotification = () => {
-    navigate("/Notification");
     SetIsNotification((prev) => !prev);
   };
 
@@ -110,8 +113,23 @@ const Header = () => {
           </Toolbar>
         </AppBar>
       </Box>
+      {isSearch && (
+        <Suspense fallback={<div>Loading...</div>}>
+          <SearchDialog />
+        </Suspense>
+      )}
 
-      {isSearch}
+      {isNotification && (
+        <Suspense fallback={<div>Loading...</div>}>
+          <NotificationDialog />
+        </Suspense>
+      )}
+
+      {isNewGroup && (
+        <Suspense fallback={<div>Loading...</div>}>
+          <NewGroupDialog />
+        </Suspense>
+      )}
     </>
   );
 };
